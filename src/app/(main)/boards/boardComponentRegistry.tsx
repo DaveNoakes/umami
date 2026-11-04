@@ -1,13 +1,14 @@
 import type { ComponentType } from 'react';
 import { TextBlock } from '@/app/(main)/boards/TextBlock';
-import { BoardFunnel } from '@/app/(main)/websites/[websiteId]/(reports)/funnels/BoardFunnel';
 import { LinkMetricsBar } from '@/app/(main)/links/[linkId]/LinkMetricsBar';
 import { PixelMetricsBar } from '@/app/(main)/pixels/[pixelId]/PixelMetricsBar';
+import { BoardFunnel } from '@/app/(main)/websites/[websiteId]/(reports)/funnels/BoardFunnel';
 import { BoardGoal } from '@/app/(main)/websites/[websiteId]/(reports)/goals/BoardGoal';
 import { BoardRevenueChart } from '@/app/(main)/websites/[websiteId]/(reports)/revenue/BoardRevenueChart';
 import { BoardRevenueMetricsBar } from '@/app/(main)/websites/[websiteId]/(reports)/revenue/BoardRevenueMetricsBar';
 import { BoardRevenueMetricsTable } from '@/app/(main)/websites/[websiteId]/(reports)/revenue/BoardRevenueMetricsTable';
 import { BoardUTM } from '@/app/(main)/websites/[websiteId]/(reports)/utm/BoardUTM';
+import { BoardEventProperty } from '@/app/(main)/websites/[websiteId]/events/BoardEventProperty';
 import { EventsMetricsBar } from '@/app/(main)/websites/[websiteId]/events/EventsMetricsBar';
 import { BoardRealtimeActiveUsers } from '@/app/(main)/websites/[websiteId]/realtime/BoardRealtimeActiveUsers';
 import { BoardRealtimeChart } from '@/app/(main)/websites/[websiteId]/realtime/BoardRealtimeChart';
@@ -92,16 +93,7 @@ const METRIC_TYPES = [
 ];
 
 const PIXEL_LINK_METRIC_TYPES = METRIC_TYPES.filter(({ value }) =>
-  [
-    'referrer',
-    'channel',
-    'browser',
-    'os',
-    'device',
-    'country',
-    'region',
-    'city',
-  ].includes(value),
+  ['referrer', 'channel', 'browser', 'os', 'device', 'country', 'region', 'city'].includes(value),
 );
 
 const LIMIT_OPTIONS = [
@@ -382,6 +374,40 @@ const componentDefinitions: ComponentDefinition[] = [
     group: 'Events',
     icon: ChartPie,
     component: EventsChart,
+  },
+  {
+    type: 'EventProperty',
+    name: 'Event property',
+    description: 'Top values of one event property, e.g. view-musician by name',
+    category: 'tables',
+    group: 'Events',
+    icon: Sheet,
+    component: BoardEventProperty,
+    defaultProps: { eventName: '', propertyName: 'name', limit: 10 },
+    configFields: [
+      { name: 'eventName', label: 'Event', type: 'text', defaultValue: '', required: true },
+      {
+        name: 'propertyName',
+        label: 'Property',
+        type: 'text',
+        defaultValue: 'name',
+        required: true,
+      },
+      {
+        name: 'filterProperty',
+        label: 'Filter property (optional)',
+        type: 'text',
+        defaultValue: '',
+      },
+      { name: 'filterValue', label: 'Filter value', type: 'text', defaultValue: '' },
+      {
+        name: 'limit',
+        label: 'Rows',
+        type: 'select',
+        options: LIMIT_OPTIONS,
+        defaultValue: '10',
+      },
+    ],
   },
 
   // Content
